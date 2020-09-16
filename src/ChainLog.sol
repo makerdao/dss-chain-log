@@ -21,6 +21,7 @@ contract ChainLog {
 
     constructor() public {
         version = bytes32("0.0.0");
+        setAddress("CHANGELOG", address(this));
         wards[msg.sender] = 1;
     }
 
