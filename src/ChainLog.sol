@@ -7,6 +7,7 @@ contract ChainLogFab {
     constructor() public {
         chainLog = new ChainLog{salt: bytes32("MCD CHANGELOG")}();
         chainLog.rely(msg.sender);
+        chainLog.deny(address(this));
     }
 
     function getChainLog() public view returns (address) {
