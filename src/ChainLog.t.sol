@@ -11,11 +11,20 @@ contract ChainLogTest is DSTest {
         log = new ChainLog();
     }
 
-    function testFail_basic_sanity() public {
-        assertTrue(false);
+    function testSetAddr() public {
+        log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        log.setAddress("MCD_CAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+
+        assertEq(log.addr("MCD_VAT"), 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        assertEq(log.addr("MCD_CAT"), 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        assertEq(log.addr("MCD_JUG"), 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
     }
 
-    function test_basic_sanity() public {
-        assertTrue(true);
+    function testSetVersion() public {
+        log.setVersion("1.0.1");
+        assertEq(log.version(), "1.0.1");
+        log.setVersion("1.0.2-rc.1");
+        assertEq(log.version(), "1.0.2-rc.1");
     }
 }
