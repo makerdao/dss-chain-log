@@ -5,10 +5,12 @@ import "ds-test/test.sol";
 import "./ChainLog.sol";
 
 contract ChainLogTest is DSTest {
-    ChainLog log;
+    ChainLogFab fab;
+    ChainLog    log;
 
     function setUp() public {
-        log = new ChainLog();
+        fab = new ChainLogFab();
+        log = ChainLog(fab.getChainLog());
     }
 
     function testSetAddr() public {

@@ -1,5 +1,19 @@
 pragma solidity ^0.6.7;
 
+contract ChainLogFab {
+
+    ChainLog chainLog;
+
+    constructor() public {
+        chainLog = new ChainLog{salt: bytes32("MCD CHANGELOG")}();
+        chainLog.rely(msg.sender);
+    }
+
+    function getChainLog() public view returns (address) {
+        return address(chainLog);
+    }
+}
+
 contract ChainLog {
 
     event Rely(address usr);
@@ -21,7 +35,7 @@ contract ChainLog {
 
     constructor() public {
         version = bytes32("0.0.0");
-        setAddress("CHANGELOG", address(this));
+        addr["CHANGELOG"] = address(this);
         wards[msg.sender] = 1;
     }
 
