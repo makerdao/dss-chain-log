@@ -29,4 +29,11 @@ contract ChainLogTest is DSTest {
         log.setVersion("1.0.2-rc.1");
         assertEq(log.version(), "1.0.2-rc.1");
     }
+
+    function testSetsha256sum() public {
+        log.setVersion("1.0.1");
+        assertEq(log.version(), "1.0.1");
+        log.setVersion("1.0.2-rc.1");
+        assertEq(log.version(), "1.0.2-rc.1");
+    }
 }

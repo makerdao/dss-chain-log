@@ -31,6 +31,8 @@ contract ChainLog {
     }
 
     bytes32 public version;
+    bytes32 public sha256sum;
+    bytes32 public ipfs;
 
     mapping (bytes32 => address) public addr;
 
@@ -42,6 +44,14 @@ contract ChainLog {
 
     function setVersion(bytes32 _version) public auth {
         version = _version;
+    }
+
+    function setSha256sum(bytes32 _sha256sum) public auth {
+        _sha256sum = _sha256sum;
+    }
+
+    function setIPFS(bytes32 _ipfs) public auth {
+        ipfs = _ipfs;
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
