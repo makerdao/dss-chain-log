@@ -1,25 +1,11 @@
 pragma solidity ^0.6.7;
 
-contract ChainLogFab {
-
-    ChainLog chainLog;
-
-    constructor() public {
-        chainLog = new ChainLog{salt: bytes32("MCD CHANGELOG")}();
-        chainLog.rely(msg.sender);
-        chainLog.deny(address(this));
-    }
-
-    function getChainLog() public view returns (address) {
-        return address(chainLog);
-    }
-}
-
 contract ChainLog {
 
     event Rely(address usr);
     event Deny(address usr);
-    event Update(bytes32 key, address addr);
+    event UpdateAddress(bytes32 key, address addr);
+    event UpdateVersion(bytes32 version);
 
     // --- Auth ---
     mapping (address => uint) public wards;
@@ -42,9 +28,11 @@ contract ChainLog {
 
     function setVersion(bytes32 _version) public auth {
         version = _version;
+        emit UpdateVersion(_version);
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
         addr[_key] = _addr;
+        emit UpdateAddress(_key, _addr);
     }
 }
