@@ -7,7 +7,7 @@ contract ChainLog {
     event UpdateVersion(string version);
     event UpdateSha256sum(string sha256sum);
     event UpdateIPFS(string ipfs);
-    event UpdateAddress(bytes32 key, address addr);
+    event UpdateAddress(string key, address addr);
 
     // --- Auth ---
     mapping (address => uint) public wards;
@@ -22,7 +22,7 @@ contract ChainLog {
     string public sha256sum;
     string public ipfs;
 
-    mapping (bytes32 => address) public addr;
+    mapping (string => address) public addr;
 
     constructor() public {
         version = "0.0.0";
@@ -45,7 +45,7 @@ contract ChainLog {
         emit UpdateIPFS(_ipfs);
     }
 
-    function setAddress(bytes32 _key, address _addr) public auth {
+    function setAddress(string memory _key, address _addr) public auth {
         addr[_key] = _addr;
         emit UpdateAddress(_key, _addr);
     }
