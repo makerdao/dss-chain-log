@@ -5,12 +5,10 @@ import "ds-test/test.sol";
 import "./ChainLog.sol";
 
 contract ChainLogTest is DSTest {
-    ChainLogFab fab;
-    ChainLog    log;
+    ChainLog log;
 
     function setUp() public {
-        fab = new ChainLogFab();
-        log = ChainLog(fab.getChainLog());
+        log = new ChainLog();
     }
 
     function testSetAddr() public {
@@ -31,9 +29,22 @@ contract ChainLogTest is DSTest {
     }
 
     function testSetsha256sum() public {
-        log.setVersion("1.0.1");
-        assertEq(log.version(), "1.0.1");
-        log.setVersion("1.0.2-rc.1");
-        assertEq(log.version(), "1.0.2-rc.1");
+        log.setSha256sum(
+            "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447"
+        );
+        assertEq(
+            log.sha256sum(),
+            "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447"
+        );
+    }
+
+    function testIPFS() public {
+        log.setIPFS(
+            "QmbbZFdXRnfiR8Zdwg557vxxp2wUURdXG28JQB8cZeeY2j"
+        );
+        assertEq(
+            log.ipfs(),
+            "QmbbZFdXRnfiR8Zdwg557vxxp2wUURdXG28JQB8cZeeY2j"
+        );
     }
 }

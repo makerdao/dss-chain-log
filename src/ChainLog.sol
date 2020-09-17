@@ -4,8 +4,10 @@ contract ChainLog {
 
     event Rely(address usr);
     event Deny(address usr);
+    event UpdateVersion(string version);
+    event UpdateSha256sum(string sha256sum);
+    event UpdateIPFS(string ipfs);
     event UpdateAddress(bytes32 key, address addr);
-    event UpdateVersion(bytes32 version);
 
     // --- Auth ---
     mapping (address => uint) public wards;
@@ -16,29 +18,31 @@ contract ChainLog {
         _;
     }
 
-    bytes32 public version;
-    bytes32 public sha256sum;
-    bytes32 public ipfs;
+    string public version;
+    string public sha256sum;
+    string public ipfs;
 
     mapping (bytes32 => address) public addr;
 
     constructor() public {
-        version = bytes32("0.0.0");
+        version = "0.0.0";
         addr["CHANGELOG"] = address(this);
         wards[msg.sender] = 1;
     }
 
-    function setVersion(bytes32 _version) public auth {
+    function setVersion(string memory _version) public auth {
         version = _version;
         emit UpdateVersion(_version);
     }
 
-    function setSha256sum(bytes32 _sha256sum) public auth {
-        _sha256sum = _sha256sum;
+    function setSha256sum(string memory _sha256sum) public auth {
+        sha256sum = _sha256sum;
+        emit UpdateSha256sum(_sha256sum);
     }
 
-    function setIPFS(bytes32 _ipfs) public auth {
+    function setIPFS(string memory _ipfs) public auth {
         ipfs = _ipfs;
+        emit UpdateIPFS(_ipfs);
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
