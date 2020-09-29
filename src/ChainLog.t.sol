@@ -11,14 +11,64 @@ contract ChainLogTest is DSTest {
         log = new ChainLog();
     }
 
-    function testSetAddr() public {
+    function testSetAddress() public {
         log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
         log.setAddress("MCD_CAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
         log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
 
-        assertEq(log.addr("MCD_VAT"), 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
-        assertEq(log.addr("MCD_CAT"), 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
-        assertEq(log.addr("MCD_JUG"), 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+        assertEq(log.getAddress("MCD_VAT"), 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        assertEq(log.getAddress("MCD_CAT"), 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        assertEq(log.getAddress("MCD_JUG"), 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+    }
+
+    function testUpdateAddress() public {
+        log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        assertEq(log.getAddress("MCD_VAT"), 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        log.setAddress("MCD_VAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        assertEq(log.getAddress("MCD_VAT"), 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+    }
+
+    function testRemoveAddress() public {
+        log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        log.setAddress("MCD_CAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+
+        log.setAddress("MCD_CAT", address(0));
+
+        assertEq(3, log.count());
+
+        string memory key;
+        address addr;
+
+        (key, addr) = log.get(0);
+        assertEq(key, "CHANGELOG");
+        assertEq(addr, address(log));
+
+        (key, addr) = log.get(1);
+        assertEq(key, "MCD_VAT");
+        assertEq(addr, 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+
+        // MCD_CAT is gone
+
+        (key, addr) = log.get(2);
+        assertEq(key, "MCD_JUG");
+        assertEq(addr, 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+    }
+
+    function testCount() public {
+        assertEq(1, log.count());  // CHANGELOG will be #1
+        log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        assertEq(2, log.count());
+        log.setAddress("MCD_CAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
+        assertEq(3, log.count());
+        log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
+        assertEq(4, log.count());
+        log.setAddress("MCD_VAT", address(0));
+        assertEq(3, log.count());
+        log.setAddress("MCD_CAT", address(0));
+        assertEq(2, log.count());
+        log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
+        assertEq(3, log.count());
     }
 
     function testSetVersion() public {
