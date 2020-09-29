@@ -7,7 +7,7 @@ contract ChainLog {
     event UpdateVersion(string version);
     event UpdateSha256sum(string sha256sum);
     event UpdateIPFS(string ipfs);
-    event UpdateAddress(string key, address addr);
+    event UpdateAddress(bytes32 key, address addr);
 
     // --- Auth ---
     mapping (address => uint) public wards;
@@ -23,8 +23,8 @@ contract ChainLog {
         address  addr;
     }
 
-    mapping (string => Location) location;
-    string[] locations;
+    mapping (bytes32 => Location) location;
+    bytes32[] public locations;
 
     string public version;
     string public sha256sum;
@@ -51,7 +51,7 @@ contract ChainLog {
         emit UpdateIPFS(_ipfs);
     }
 
-    function setAddress(string memory _key, address _addr) public auth {
+    function setAddress(bytes32 _key, address _addr) public auth {
         if (location[_key].addr == address(0)) {       // Key does not exist
             _addAddress(_key, _addr);
         } else if (_addr == address(0)) {              // Remove zero address
@@ -67,16 +67,20 @@ contract ChainLog {
     }
 
     // Returns the key and address of an item in the changelog array (for enumeration)
-    function get(uint256 index) public view returns (string memory, address) {
+    function get(uint256 index) public view returns (bytes32, address) {
         return (locations[index], location[locations[index]].addr);
     }
 
-    function getAddress(string memory _key) public view returns (address addr) {
+    function list() public view returns (bytes32[] memory) {
+        return locations;
+    }
+
+    function getAddress(bytes32 _key) public view returns (address addr) {
         addr = location[_key].addr;
         require(addr != address(0), "dss-chain-log/invalid-key");
     }
 
-    function _addAddress(string memory _key, address _addr) internal {
+    function _addAddress(bytes32 _key, address _addr) internal {
         locations.push(_key);
         location[locations[locations.length - 1]] = Location(
             locations.length - 1,
@@ -84,16 +88,16 @@ contract ChainLog {
         );
     }
 
-    function _updateAddress(string memory _key, address _addr) internal {
+    function _updateAddress(bytes32 _key, address _addr) internal {
         location[_key].addr = _addr;
     }
 
-    function _removeAddress(string memory _key) internal {
-        uint256 _index = location[_key].pos;                     // Get pos in array
-        string memory _move  = locations[locations.length - 1];  // Get last location
-        locations[_index] = _move;                               // Replace
-        location[_move].pos = _index;                            // Update array pos
-        locations.pop();                                         // Trim last location
-        delete location[_key];                                   // Delete struct data
+    function _removeAddress(bytes32 _key) internal {
+        uint256 _index = location[_key].pos;               // Get pos in array
+        bytes32 _move  = locations[locations.length - 1];  // Get last location
+        locations[_index] = _move;                         // Replace
+        location[_move].pos = _index;                      // Update array pos
+        locations.pop();                                   // Trim last location
+        delete location[_key];                             // Delete struct data
     }
 }
