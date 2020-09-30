@@ -33,7 +33,7 @@ contract ChainLog {
     constructor() public {
         wards[msg.sender] = 1;
         setVersion("0.0.0");
-        setAddress("CHANGELOG", address(this));        
+        setAddress("CHANGELOG", address(this));
     }
 
     function setVersion(string memory _version) public auth {
@@ -52,12 +52,12 @@ contract ChainLog {
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
-        if (location[_key].addr == address(0)) {       // Key does not exist
-            _addAddress(_key, _addr);
-        } else if (_addr == address(0)) {              // Remove zero address
-            _removeAddress(_key);
-        } else {                                       // Update existing key
-            _updateAddress(_key, _addr);
+        if (_addr == address(0)) {
+            _removeAddress(_key);               // Remove zero address
+        } else if (location[_key].addr == address(0)) {
+            _addAddress(_key, _addr);           // Key does not exist
+        } else {
+            _updateAddress(_key, _addr);        // Update existing key
         }
         emit UpdateAddress(_key, _addr);
     }
@@ -89,10 +89,12 @@ contract ChainLog {
     }
 
     function _updateAddress(bytes32 _key, address _addr) internal {
+        require(locations[location[_key].pos] == _key, "dss-chain-log/invalid-key");
         location[_key].addr = _addr;
     }
 
     function _removeAddress(bytes32 _key) internal {
+        require(locations[location[_key].pos] == _key, "dss-chain-log/invalid-key");
         uint256 _index = location[_key].pos;               // Get pos in array
         bytes32 _move  = locations[locations.length - 1];  // Get last location
         locations[_index] = _move;                         // Replace
