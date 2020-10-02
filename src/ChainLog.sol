@@ -8,6 +8,7 @@ contract ChainLog {
     event UpdateSha256sum(string sha256sum);
     event UpdateIPFS(string ipfs);
     event UpdateAddress(bytes32 key, address addr);
+    event RemoveAddress(bytes32 key);
 
     // --- Auth ---
     mapping (address => uint) public wards;
@@ -52,14 +53,23 @@ contract ChainLog {
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
-        if (_addr == address(0)) {
-            _removeAddress(_key);               // Remove zero address
-        } else if (location[_key].addr == address(0)) {
-            _addAddress(_key, _addr);           // Key does not exist
+        if (count() > 0 && _key == locations[location[_key].pos]) {
+            _updateAddress(_key, _addr);   // Key exists in locations
         } else {
-            _updateAddress(_key, _addr);        // Update existing key
+            _addAddress(_key, _addr);      // Add key to locations
         }
         emit UpdateAddress(_key, _addr);
+    }
+
+    // Removes the key from the locations list()
+    //   WARNING: To save the expense of shifting an array on-chain,
+    //     this will replace the key to be deleted with the last key
+    //     in the array, and can therefore result in keys being out
+    //     of order. Use this only if you intend to reorder the list(),
+    //     otherwise consider using `setAddress("KEY", address(0));`
+    function removeAddress(bytes32 _key) public auth {
+        _removeAddress(_key);
+        emit RemoveAddress(_key);
     }
 
     function count() public view returns (uint256) {

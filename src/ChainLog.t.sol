@@ -33,7 +33,7 @@ contract ChainLogTest is DSTest {
         log.setAddress("MCD_CAT", 0xa5679C04fc3d9d8b0AaB1F0ab83555b301cA70Ea);
         log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
 
-        log.setAddress("MCD_CAT", address(0));
+        log.removeAddress("MCD_CAT");
 
         assertEq(3, log.count());
 
@@ -64,11 +64,11 @@ contract ChainLogTest is DSTest {
         log.setAddress("MCD_JUG", 0x19c0976f590D67707E62397C87829d896Dc0f1F1);
         assertEq(4, log.count());
         log.setAddress("MCD_VAT", address(0));
-        assertEq(3, log.count());
+        assertEq(4, log.count());
         log.setAddress("MCD_CAT", address(0));
-        assertEq(2, log.count());
+        assertEq(4, log.count());
         log.setAddress("MCD_VAT", 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B);
-        assertEq(3, log.count());
+        assertEq(4, log.count());
     }
 
     function testGetList() public {
@@ -84,6 +84,15 @@ contract ChainLogTest is DSTest {
         assertEq(locs[3], "MCD_JUG");
 
         log.setAddress("MCD_CAT", address(0));
+
+        locs = log.list();
+
+        assertEq(locs[0], "CHANGELOG");
+        assertEq(locs[1], "MCD_VAT");
+        assertEq(locs[2], "MCD_CAT");
+        assertEq(locs[3], "MCD_JUG");
+
+        log.removeAddress("MCD_CAT");
 
         locs = log.list();
 
