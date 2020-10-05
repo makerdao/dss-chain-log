@@ -54,7 +54,7 @@ contract ChainLog {
 
     function setAddress(bytes32 _key, address _addr) public auth {
         if (count() > 0 && _key == locations[location[_key].pos]) {
-            _updateAddress(_key, _addr);   // Key exists in locations
+            location[_key].addr = _addr;   // Key exists in locations (update)
         } else {
             _addAddress(_key, _addr);      // Add key to locations
         }
@@ -96,11 +96,6 @@ contract ChainLog {
             locations.length - 1,
             _addr
         );
-    }
-
-    function _updateAddress(bytes32 _key, address _addr) internal {
-        require(locations[location[_key].pos] == _key, "dss-chain-log/invalid-key");
-        location[_key].addr = _addr;
     }
 
     function _removeAddress(bytes32 _key) internal {
