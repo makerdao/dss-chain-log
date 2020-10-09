@@ -1,3 +1,6 @@
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 pragma solidity ^0.6.7;
 
 contract ChainLog {
@@ -19,7 +22,6 @@ contract ChainLog {
         _;
     }
 
-
     struct Location {
         uint256  pos;
         address  addr;
@@ -37,6 +39,7 @@ contract ChainLog {
         setVersion("0.0.0");
         setAddress("CHANGELOG", address(this));
     }
+
 
     function setVersion(string memory _version) public auth {
         version = _version;
