@@ -2,7 +2,11 @@
 
 An auth-managed on-chain changelog for the MCD system
 
-## Public functions
+## Usage
+
+
+
+### Public functions
 
 * `list()(bytes32[] memory)`: return all of the keys in the changelog
 * `getAddress(bytes32)(address)`: for a given key, return the address
@@ -11,9 +15,24 @@ An auth-managed on-chain changelog for the MCD system
 * `version()(string)`: Returns a version for the changelog (if set)
 * `wards(address)(uint256)`: 0 if address is not a ward, 1 if it is.
 
-## Auth functions
+### Auth functions
 
 * `rely(address)`/`deny(address)`: add and remove authorization
 * `setAddress(bytes32,address)`: add or update a key/address pair
 * `removeAddress(bytes32)`: remove a key (warning: this can shuffle the array)
 * `setVersion(string memory)`: set the version of the current changelog
+
+## Development
+
+### Requirements
+
+* [Dapptools](https://github.com/dapphub/dapptools)
+
+### Testing
+
+```
+$ dapp update
+$ make test
+```
+
+
