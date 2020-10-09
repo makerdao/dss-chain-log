@@ -78,8 +78,8 @@ contract ChainLog {
     }
 
     // Returns the key and address of an item in the changelog array (for enumeration)
-    function get(uint256 index) public view returns (bytes32, address) {
-        return (keys[index], location[keys[index]].addr);
+    function get(uint256 _index) public view returns (bytes32, address) {
+        return (keys[_index], location[keys[_index]].addr);
     }
 
     function list() public view returns (bytes32[] memory) {
@@ -103,7 +103,7 @@ contract ChainLog {
         uint256 index = location[_key].pos;       // Get pos in array
         require(keys[index] == _key, "dss-chain-log/invalid-key");
         bytes32 move  = keys[keys.length - 1];    // Get last key
-        keys[index] = move;                      // Replace
+        keys[index] = move;                       // Replace
         location[move].pos = index;               // Update array pos
         keys.pop();                               // Trim last key
         delete location[_key];                    // Delete struct data
