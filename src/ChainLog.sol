@@ -19,13 +19,14 @@ contract ChainLog {
         _;
     }
 
+
     struct Location {
         uint256  pos;
         address  addr;
     }
-
     mapping (bytes32 => Location) location;
-    bytes32[] public locations;
+
+    bytes32[] public keys;
 
     string public version;
     string public sha256sum;
@@ -53,15 +54,15 @@ contract ChainLog {
     }
 
     function setAddress(bytes32 _key, address _addr) public auth {
-        if (count() > 0 && _key == locations[location[_key].pos]) {
-            location[_key].addr = _addr;   // Key exists in locations (update)
+        if (count() > 0 && _key == keys[location[_key].pos]) {
+            location[_key].addr = _addr;   // Key exists in keys (update)
         } else {
-            _addAddress(_key, _addr);      // Add key to locations
+            _addAddress(_key, _addr);      // Add key to keys array
         }
         emit UpdateAddress(_key, _addr);
     }
 
-    // Removes the key from the locations list()
+    // Removes the key from the keys list()
     //   WARNING: To save the expense of shifting an array on-chain,
     //     this will replace the key to be deleted with the last key
     //     in the array, and can therefore result in keys being out
@@ -73,16 +74,16 @@ contract ChainLog {
     }
 
     function count() public view returns (uint256) {
-        return locations.length;
+        return keys.length;
     }
 
     // Returns the key and address of an item in the changelog array (for enumeration)
     function get(uint256 index) public view returns (bytes32, address) {
-        return (locations[index], location[locations[index]].addr);
+        return (keys[index], location[keys[index]].addr);
     }
 
     function list() public view returns (bytes32[] memory) {
-        return locations;
+        return keys;
     }
 
     function getAddress(bytes32 _key) public view returns (address addr) {
@@ -91,20 +92,20 @@ contract ChainLog {
     }
 
     function _addAddress(bytes32 _key, address _addr) internal {
-        locations.push(_key);
-        location[locations[locations.length - 1]] = Location(
-            locations.length - 1,
+        keys.push(_key);
+        location[keys[keys.length - 1]] = Location(
+            keys.length - 1,
             _addr
         );
     }
 
     function _removeAddress(bytes32 _key) internal {
-        require(locations[location[_key].pos] == _key, "dss-chain-log/invalid-key");
-        uint256 _index = location[_key].pos;               // Get pos in array
-        bytes32 _move  = locations[locations.length - 1];  // Get last location
-        locations[_index] = _move;                         // Replace
-        location[_move].pos = _index;                      // Update array pos
-        locations.pop();                                   // Trim last location
-        delete location[_key];                             // Delete struct data
+        require(keys[location[_key].pos] == _key, "dss-chain-log/invalid-key");
+        uint256 _index = location[_key].pos;       // Get pos in array
+        bytes32 _move  = keys[keys.length - 1];    // Get last key
+        keys[_index] = _move;                      // Replace
+        location[_move].pos = _index;              // Update array pos
+        keys.pop();                                // Trim last key
+        delete location[_key];                     // Delete struct data
     }
 }
