@@ -100,12 +100,12 @@ contract ChainLog {
     }
 
     function _removeAddress(bytes32 _key) internal {
-        require(keys[location[_key].pos] == _key, "dss-chain-log/invalid-key");
-        uint256 _index = location[_key].pos;       // Get pos in array
-        bytes32 _move  = keys[keys.length - 1];    // Get last key
-        keys[_index] = _move;                      // Replace
-        location[_move].pos = _index;              // Update array pos
-        keys.pop();                                // Trim last key
-        delete location[_key];                     // Delete struct data
+        uint256 index = location[_key].pos;       // Get pos in array
+        require(keys[index] == _key, "dss-chain-log/invalid-key");
+        bytes32 move  = keys[keys.length - 1];    // Get last key
+        keys[index] = move;                      // Replace
+        location[move].pos = index;               // Update array pos
+        keys.pop();                               // Trim last key
+        delete location[_key];                    // Delete struct data
     }
 }
