@@ -21,7 +21,7 @@
 pragma solidity ^0.6.7;
 
 /// @title An on-chain governance-managed contract registry
-/// @notice Publicly readable functions to be set by an auth user
+/// @notice Publicly readable data; mutating functions must be called by an authorized user
 contract ChainLog {
 
     event Rely(address usr);
@@ -74,7 +74,7 @@ contract ChainLog {
         emit UpdateSha256sum(_sha256sum);
     }
 
-    /// @notice Set the IPFS has of a pinned changelog
+    /// @notice Set the IPFS hash of a pinned changelog
     /// @dev designed to store IPFS pin hash that can retreive changelog json
     /// @param _ipfs The ipfs pin hash of an ipfs hosted log (optional)
     function setIPFS(string memory _ipfs) public auth {
