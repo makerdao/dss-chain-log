@@ -127,4 +127,8 @@ contract ChainLogTest is DSTest {
             "QmbbZFdXRnfiR8Zdwg557vxxp2wUURdXG28JQB8cZeeY2j"
         );
     }
+
+    function testApproximateDeployCost() public {
+        new ChainLog();
+    }
 }
