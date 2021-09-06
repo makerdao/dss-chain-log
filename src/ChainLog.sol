@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 /// ChainLog.sol - An on-chain governance-managed contract registry
@@ -18,7 +17,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pragma solidity ^0.6.7;
+pragma solidity ^0.6.12;
 
 /// @title An on-chain governance-managed contract registry
 /// @notice Publicly readable data; mutating functions must be called by an authorized user

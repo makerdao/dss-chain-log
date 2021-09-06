@@ -4,8 +4,8 @@
 }: with dappPkgs;
 
 mkShell {
-  DAPP_SOLC = solc-static-versions.solc_0_6_7 + "/bin/solc-0.6.7";
-  SOLC_FLAGS = "--optimize --optimize-runs=1000";
+  DAPP_SOLC = solc-static-versions.solc_0_6_12 + "/bin/solc-0.6.12";
+  SOLC_FLAGS = "--optimize --optimize-runs=200";
   buildInputs = [
     dapp
   ];
