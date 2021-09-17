@@ -1,4 +1,5 @@
 # dss-chain-log
+![Build Status](https://github.com/makerdao/dss-chain-log/actions/workflows/.github/workflows/tests.yaml/badge.svg?branch=master)
 
 An auth-managed on-chain changelog for the MCD system
 
