@@ -3,7 +3,6 @@
 ### Usage:
 ### ./chainlog.sh list all entry-values in the chainlog
 ### ./chainlog.sh <entry> return the entry's address
-
 set -e
 
 [[ "$ETH_RPC_URL" ]] || { echo "Please set a ETH_RPC_URL"; exit 1; }
@@ -13,9 +12,9 @@ CHANGELOG=0xdA0Ab1e0017DEbCd72Be8599041a2aa3bA7e740F
 echo -e "Network: $(seth chain)"
 if [[ -z $1 ]];
 then
-    LIST=$(seth call "$CHANGELOG" 'list()(bytes32[])')
-
-    for key in $(echo -e "$LIST" | sed "s/,/ /g")
+    list=$(seth call "$CHANGELOG" 'list()(bytes32[])')
+    IFS=","
+    for key in $list
     do
         seth --to-ascii "$key"
         seth call "$CHANGELOG" 'getAddress(bytes32)(address)' "$key"
