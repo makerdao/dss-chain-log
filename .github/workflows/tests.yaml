@@ -10,13 +10,13 @@ jobs:
         submodules: recursive
 
     - name: Install nix 2.3.6
-      uses: cachix/install-nix-action@v13
+      uses: cachix/install-nix-action@v19
       with:
         install_url: https://releases.nixos.org/nix/nix-2.3.6/install
         nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Use maker cachix
-      uses: cachix/cachix-action@v12
+      uses: cachix/cachix-action@v10
       with:
         name: maker
 
