@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
 
@@ -16,7 +16,7 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Use maker cachix
-      uses: cachix/cachix-action@v10
+      uses: cachix/cachix-action@v12
       with:
         name: maker
 
